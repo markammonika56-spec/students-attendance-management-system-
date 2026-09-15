@@ -1,531 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
+# Student Attendance Management System
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+A simple and responsive web-based Student Attendance Management System developed using HTML, CSS, and JavaScript.
 
-    <title>Student Attendance Management System</title>
+## 📌 Project Overview
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+The Student Attendance Management System is a mini web project designed to make student attendance tracking simple and easy.
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #222;
-        }
+It allows users to add students, mark their attendance, search for students, and automatically calculate attendance percentage.
 
-        header {
-            background: #263238;
-            color: white;
-            text-align: center;
-            padding: 25px 15px;
-        }
+## ✨ Features
 
-        header h1 {
-            margin: 0;
-            font-size: 28px;
-        }
+- ➕ Add new students
+- 🔍 Search students by name or roll number
+- ✅ Mark students as Present
+- ❌ Mark students as Absent
+- 📊 Automatically calculate attendance percentage
+- 🗑️ Delete student records
+- 💾 Save data using browser Local Storage
+- 📱 Responsive design for mobile and desktop
+- 🌐 Deployed using GitHub Pages
 
-        header p {
-            margin-top: 8px;
-            color: #cfd8dc;
-        }
+## 🛠️ Technologies Used
 
-        .container {
-            max-width: 1000px;
-            margin: 25px auto;
-            padding: 0 15px;
-        }
+- HTML5
+- CSS3
+- JavaScript
+- Browser Local Storage
+- GitHub Pages
 
-        .card {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-        }
+## ⚙️ How It Works
 
-        h2 {
-            margin-top: 0;
-            color: #263238;
-        }
+1. Enter the student's roll number and name.
+2. Click the **Add Student** button.
+3. Use **Present** or **Absent** buttons to record attendance.
+4. The system automatically calculates the attendance percentage.
+5. Use the search box to find a particular student.
+6. Student data is stored in the browser using Local Storage.
 
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 7px 0;
-            border: 1px solid #ccc;
-            border-radius: 7px;
-            font-size: 16px;
-        }
+## 📊 Attendance Calculation
 
-        button {
-            border: none;
-            padding: 10px 15px;
-            border-radius: 7px;
-            cursor: pointer;
-            font-size: 14px;
-            margin: 3px;
-        }
+Attendance percentage is calculated using:
 
-        .add-btn {
-            background: #263238;
-            color: white;
-            width: 100%;
-            margin-top: 10px;
-        }
+**Attendance % = (Present Classes / Total Classes) × 100**
 
-        .present {
-            background: #2e7d32;
-            color: white;
-        }
+## 🎯 Project Purpose
 
-        .absent {
-            background: #c62828;
-            color: white;
-        }
+This project was developed as a BCA mini project to practice:
 
-        .delete {
-            background: #757575;
-            color: white;
-        }
+- Web development
+- JavaScript programming
+- DOM manipulation
+- Local Storage
+- Basic project deployment using GitHub Pages
 
-        .stats {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
+## 🚀 Future Improvements
 
-        .stat {
-            flex: 1;
-            min-width: 120px;
-            background: #eceff1;
-            padding: 15px;
-            text-align: center;
-            border-radius: 8px;
-        }
+- Student login system
+- Admin dashboard
+- Monthly attendance reports
+- Export attendance data
+- Database integration
+- User authentication
 
-        .stat strong {
-            display: block;
-            font-size: 22px;
-        }
+## 👩‍💻 Developer
 
-        .table-box {
-            overflow-x: auto;
-        }
+**BCA (AI/ML) Student**
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 650px;
-        }
+Built as a self-learning and academic mini project.
 
-        th,
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: center;
-        }
+## 📄 License
 
-        th {
-            background: #eceff1;
-        }
+This project is created for educational purposes.
 
-        .no-data {
-            text-align: center;
-            padding: 25px;
-            color: #777;
-        }
-
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 22px;
-            }
-
-            .card {
-                padding: 15px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <header>
-        <h1>Student Attendance Management System</h1>
-        <p>BCA Mini Project | HTML, CSS & JavaScript</p>
-    </header>
-
-    <div class="container">
-
-        <!-- Add Student -->
-        <div class="card">
-            <h2>➕ Add Student</h2>
-
-            <input type="text" id="rollNo" placeholder="Enter Roll Number">
-
-            <input type="text" id="studentName" placeholder="Enter Student Name">
-
-            <button class="add-btn" onclick="addStudent()">
-                Add Student
-            </button>
-        </div>
-
-        <!-- Search Student -->
-        <div class="card">
-
-            <h2>🔍 Search Student</h2>
-
-            <input
-                type="text"
-                id="search"
-                placeholder="Search by Roll Number or Name"
-                oninput="displayStudents()"
-            >
-
-            <!-- Statistics -->
-            <div class="stats">
-
-                <div class="stat">
-                    <strong id="totalStudents">0</strong>
-                    Students
-                </div>
-
-                <div class="stat">
-                    <strong id="totalPresent">0</strong>
-                    Present
-                </div>
-
-                <div class="stat">
-                    <strong id="totalAbsent">0</strong>
-                    Absent
-                </div>
-
-            </div>
-
-            <!-- Attendance Table -->
-            <div class="table-box">
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Roll No.</th>
-                            <th>Name</th>
-                            <th>Present</th>
-                            <th>Absent</th>
-                            <th>Attendance %</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="studentTable">
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- JavaScript -->
-    <script>
-
-        let students = JSON.parse(
-            localStorage.getItem("students")
-        ) || [];
-
-
-        function saveData() {
-
-            localStorage.setItem(
-                "students",
-                JSON.stringify(students)
-            );
-
-        }
-
-
-        function addStudent() {
-
-            const roll =
-                document.getElementById("rollNo").value.trim();
-
-            const name =
-                document.getElementById("studentName").value.trim();
-
-
-            if (roll === "" || name === "") {
-
-                alert(
-                    "Please enter Roll Number and Student Name."
-                );
-
-                return;
-            }
-
-
-            const exists = students.some(
-                student => student.roll === roll
-            );
-
-
-            if (exists) {
-
-                alert(
-                    "This Roll Number already exists."
-                );
-
-                return;
-            }
-
-
-            students.push({
-
-                roll: roll,
-
-                name: name,
-
-                present: 0,
-
-                absent: 0
-
-            });
-
-
-            saveData();
-
-
-            document.getElementById("rollNo").value = "";
-
-            document.getElementById("studentName").value = "";
-
-
-            displayStudents();
-
-        }
-
-
-        function markPresent(index) {
-
-            students[index].present++;
-
-            saveData();
-
-            displayStudents();
-
-        }
-
-
-        function markAbsent(index) {
-
-            students[index].absent++;
-
-            saveData();
-
-            displayStudents();
-
-        }
-
-
-        function deleteStudent(index) {
-
-            if (
-                confirm(
-                    "Are you sure you want to delete this student?"
-                )
-            ) {
-
-                students.splice(index, 1);
-
-                saveData();
-
-                displayStudents();
-
-            }
-
-        }
-
-
-        function displayStudents() {
-
-            const table =
-                document.getElementById("studentTable");
-
-            const search =
-                document.getElementById("search")
-                .value
-                .toLowerCase();
-
-
-            table.innerHTML = "";
-
-
-            const filteredStudents =
-                students.filter(student =>
-
-                    student.roll
-                        .toLowerCase()
-                        .includes(search)
-
-                    ||
-
-                    student.name
-                        .toLowerCase()
-                        .includes(search)
-
-                );
-
-
-            if (filteredStudents.length === 0) {
-
-                table.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="no-data">
-                            No students found
-                        </td>
-                    </tr>
-                `;
-
-            }
-
-
-            filteredStudents.forEach(student => {
-
-                const index =
-                    students.indexOf(student);
-
-
-                const total =
-                    student.present + student.absent;
-
-
-                const percentage =
-                    total === 0
-                        ? 0
-                        : (
-                            (student.present / total) * 100
-                        ).toFixed(1);
-
-
-                table.innerHTML += `
-
-                    <tr>
-
-                        <td>
-                            ${student.roll}
-                        </td>
-
-                        <td>
-                            ${student.name}
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="present"
-                                onclick="markPresent(${index})"
-                            >
-                                + Present
-                            </button>
-
-                            <br>
-
-                            ${student.present}
-
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="absent"
-                                onclick="markAbsent(${index})"
-                            >
-                                + Absent
-                            </button>
-
-                            <br>
-
-                            ${student.absent}
-
-                        </td>
-
-                        <td>
-                            <strong>
-                                ${percentage}%
-                            </strong>
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="delete"
-                                onclick="deleteStudent(${index})"
-                            >
-                                Delete
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-            });
-
-
-            updateStats();
-
-        }
-
-
-        function updateStats() {
-
-            document.getElementById(
-                "totalStudents"
-            ).innerText = students.length;
-
-
-            const present =
-                students.reduce(
-                    (sum, student) =>
-                        sum + student.present,
-                    0
-                );
-
-
-            const absent =
-                students.reduce(
-                    (sum, student) =>
-                        sum + student.absent,
-                    0
-                );
-
-
-            document.getElementById(
-                "totalPresent"
-            ).innerText = present;
-
-
-            document.getElementById(
-                "totalAbsent"
-            ).innerText = absent;
-
-        }
-
-
-        displayStudents();
-
-    </script>
-
-</body>
-
-</html>
+            
