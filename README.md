@@ -1,260 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Student Attendance Management System</title>
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    color: #222;
-}
-
-header {
-    background: #263238;
-    color: white;
-    text-align: center;
-    padding: 25px 15px;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 28px;
-}
-
-header p {
-    margin: 8px 0 0;
-    color: #cfd8dc;
-}
-
-.container {
-    max-width: 1000px;
-    margin: 25px auto;
-    padding: 0 15px;
-}
-
-.card {
-    background: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-}
-
-h2 {
-    margin-top: 0;
-    color: #263238;
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 7px 0;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    font-size: 16px;
-}
-
-button {
-    border: none;
-    padding: 10px 15px;
-    border-radius: 7px;
-    cursor: pointer;
-    font-size: 14px;
-    margin: 3px;
-}
-
-.add-btn {
-    background: #263238;
-    color: white;
-    width: 100%;
-    margin-top: 10px;
-}
-
-.present {
-    background: #2e7d32;
-    color: white;
-}
-
-.absent {
-    background: #c62828;
-    color: white;
-}
-
-.delete {
-    background: #757575;
-    color: white;
-}
-
-.search {
-    margin-bottom: 15px;
-}
-
-.table-box {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 650px;
-}
-
-th, td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-th {
-    background: #eceff1;
-}
-
-.no-data {
-    text-align: center;
-    padding: 25px;
-    color: #777;
-}
-
-.stats {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-}
-
-.stat {
-    flex: 1;
-    min-width: 120px;
-    background: #eceff1;
-    padding: 15px;
-    text-align: center;
-    border-radius: 8px;
-}
-
-.stat strong {
-    display: block;
-    font-size: 22px;
-}
-
-@media(max-width:600px) {
-    header h1 {
-        font-size: 22px;
-    }
-
-    .card {
-        padding: 15px;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<header>
-    <h1>Student Attendance Management System</h1>
-    <p>BCA Mini Project | HTML, CSS & JavaScript</p>
-</header>
-
-<div class="container">
-
-    <!-- Add Student -->
-    <div class="card">
-        <h2>➕ Add Student</h2>
-
-        <input type="text" id="rollNo" placeholder="Enter Roll Number">
-
-        <input type="text" id="studentName" placeholder="Enter Student Name">
-
-        <button class="add-btn" onclick="addStudent()">
-            Add Student
-        </button>
-    </div>
-
-    <!-- Search -->
-    <div class="card">
-        <h2>🔍 Search Student</h2>
-
-        <input
-            class="search"
-            type="text"
-            id="search"
-            placeholder="Search by Roll Number or Name"
-            oninput="displayStudents()"
-        >
-
-        <div class="stats">
-            <div class="stat">
-                <strong id="totalStudents">0</strong>
-                Students
-            </div>
-
-            <div class="stat">
-                <strong id="totalPresent">0</strong>
-                Present
-            </div>
-
-            <div class="stat">
-                <strong id="totalAbsent">0</strong>
-                Absent
-            </div>
-        </div>
-
-        <div class="table-box">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Roll No.</th>
-                        <th>Name</th>
-                        <th>Present</th>
-                        <th>Absent</th>
-                        <th>Attendance %</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-
-                <tbody id="studentTable">
-                </tbody>
-            </table>
-
-        </div>
-    </div>
-
-</div>
-
 <script>
 
-let students = JSON.parse(localStorage.getItem("students")) || [];
-
-function saveData() {
-    localStorage.setItem("students", JSON.stringify(students));
-}
+let students = [];
 
 function addStudent() {
 
-    let roll = document.getElementById("rollNo").value.trim();
-    let name = document.getElementById("studentName").value.trim();
+    const roll = document.getElementById("rollNo").value.trim();
+    const name = document.getElementById("studentName").value.trim();
 
     if (roll === "" || name === "") {
-        alert("Please enter Roll Number and Student Name.");
-        return;
-    }
-
-    let alreadyExists = students.some(
-        student => student.roll === roll
-    );
-
-    if (alreadyExists) {
-        alert("This Roll Number already exists.");
+        alert("Please enter Roll Number and Student Name");
         return;
     }
 
@@ -265,8 +19,6 @@ function addStudent() {
         absent: 0
     });
 
-    saveData();
-
     document.getElementById("rollNo").value = "";
     document.getElementById("studentName").value = "";
 
@@ -274,40 +26,24 @@ function addStudent() {
 }
 
 function markPresent(index) {
-
     students[index].present++;
-
-    saveData();
     displayStudents();
 }
 
 function markAbsent(index) {
-
     students[index].absent++;
-
-    saveData();
     displayStudents();
 }
 
 function deleteStudent(index) {
-
-    if (confirm("Delete this student?")) {
-
-        students.splice(index, 1);
-
-        saveData();
-        displayStudents();
-    }
+    students.splice(index, 1);
+    displayStudents();
 }
 
 function displayStudents() {
 
-    let table = document.getElementById("studentTable");
-
-    let search = document
-        .getElementById("search")
-        .value
-        .toLowerCase();
+    const table = document.getElementById("studentTable");
+    const search = document.getElementById("search").value.toLowerCase();
 
     table.innerHTML = "";
 
@@ -317,7 +53,6 @@ function displayStudents() {
     );
 
     if (filteredStudents.length === 0) {
-
         table.innerHTML = `
             <tr>
                 <td colspan="6" class="no-data">
@@ -325,93 +60,66 @@ function displayStudents() {
                 </td>
             </tr>
         `;
-
-    } else {
-
-        filteredStudents.forEach(student => {
-
-            let realIndex = students.indexOf(student);
-
-            let total =
-                student.present + student.absent;
-
-            let percentage =
-                total === 0
-                ? 0
-                : ((student.present / total) * 100).toFixed(1);
-
-            table.innerHTML += `
-                <tr>
-
-                    <td>${student.roll}</td>
-
-                    <td>${student.name}</td>
-
-                    <td>
-                        <button
-                            class="present"
-                            onclick="markPresent(${realIndex})">
-                            + Present
-                        </button>
-                        <br>
-                        ${student.present}
-                    </td>
-
-                    <td>
-                        <button
-                            class="absent"
-                            onclick="markAbsent(${realIndex})">
-                            + Absent
-                        </button>
-                        <br>
-                        ${student.absent}
-                    </td>
-
-                    <td>
-                        <strong>${percentage}%</strong>
-                    </td>
-
-                    <td>
-                        <button
-                            class="delete"
-                            onclick="deleteStudent(${realIndex})">
-                            Delete
-                        </button>
-                    </td>
-
-                </tr>
-            `;
-        });
     }
 
-    updateStats();
-}
+    filteredStudents.forEach(student => {
 
-function updateStats() {
+        const index = students.indexOf(student);
+
+        const total = student.present + student.absent;
+
+        const percentage = total === 0
+            ? 0
+            : ((student.present / total) * 100).toFixed(1);
+
+        table.innerHTML += `
+            <tr>
+                <td>${student.roll}</td>
+
+                <td>${student.name}</td>
+
+                <td>
+                    <button class="present"
+                        onclick="markPresent(${index})">
+                        + Present
+                    </button>
+                    <br>
+                    ${student.present}
+                </td>
+
+                <td>
+                    <button class="absent"
+                        onclick="markAbsent(${index})">
+                        + Absent
+                    </button>
+                    <br>
+                    ${student.absent}
+                </td>
+
+                <td>
+                    ${percentage}%
+                </td>
+
+                <td>
+                    <button class="delete"
+                        onclick="deleteStudent(${index})">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
 
     document.getElementById("totalStudents").innerText =
         students.length;
 
-    let present = students.reduce(
-        (sum, student) => sum + student.present,
-        0
-    );
-
-    let absent = students.reduce(
-        (sum, student) => sum + student.absent,
-        0
-    );
-
     document.getElementById("totalPresent").innerText =
-        present;
+        students.reduce((sum, s) => sum + s.present, 0);
 
     document.getElementById("totalAbsent").innerText =
-        absent;
+        students.reduce((sum, s) => sum + s.absent, 0);
 }
 
 displayStudents();
 
 </script>
-
-</body>
-</html>
